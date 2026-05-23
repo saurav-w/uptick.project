@@ -8,6 +8,7 @@ export interface IUser {
     createdAt?: Date;
     updatedAt?: Date;
 }
+1
 
 const UserSchema = new Schema<IUser>(
     {
