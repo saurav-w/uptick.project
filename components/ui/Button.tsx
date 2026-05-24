@@ -4,7 +4,6 @@ import clsx from "clsx";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "accent" | "outline" | "ghost";
   size?: "sm" | "md" | "lg";
-  asChild?: boolean;
   isLoading?: boolean;
   icon?: React.ReactNode;
 }
@@ -15,7 +14,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       variant = "primary",
       size = "md",
-      asChild = false,
       isLoading = false,
       icon,
       children,
@@ -24,8 +22,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const Comp = asChild ? "div" : "button";
-
     const baseStyles = "btn";
     const sizeStyles = {
       sm: "btn-sm",
@@ -41,15 +37,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <Comp
-        {...(asChild ? {} : { ref, disabled: disabled || isLoading })}
+      <button
+        ref={ref}
+        disabled={disabled || isLoading}
         className={clsx(
           baseStyles,
           sizeStyles[size],
           variantStyles[variant],
           className
         )}
-        {...(!asChild ? props : { ...props, ref: ref as any })}
+        {...props}
       >
         {isLoading ? (
           <span className="inline-block animate-spin mr-2">

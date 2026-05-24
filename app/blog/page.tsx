@@ -129,11 +129,3 @@ export default function Blog() {
     </>
   );
 }
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
