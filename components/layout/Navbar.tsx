@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import Button from "./Button";
+import Button from "@/components/ui/Button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

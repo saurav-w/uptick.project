@@ -91,7 +91,6 @@ export default function Blog() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: i * 0.05 }}
                 viewport={{ once: true }}
-                asChild
               >
                 <Link href={`/blog/${post.slug}`}>
                   <Card className="h-full hover:border-primary/30 group cursor-pointer">
@@ -122,6 +121,14 @@ export default function Blog() {
                     </div>
                   </Card>
                 </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
               </motion.div>
             ))}
           </div>

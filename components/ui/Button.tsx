@@ -1,5 +1,4 @@
 import React from "react";
-import { Slot } from "@radix-ui/react-slot";
 import clsx from "clsx";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -25,7 +24,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const Comp = asChild ? Slot : "button";
+    const Comp = asChild ? "div" : "button";
 
     const baseStyles = "btn";
     const sizeStyles = {
@@ -43,15 +42,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <Comp
-        ref={ref}
-        disabled={disabled || isLoading}
+        {...(asChild ? {} : { ref, disabled: disabled || isLoading })}
         className={clsx(
           baseStyles,
           sizeStyles[size],
           variantStyles[variant],
           className
         )}
-        {...props}
+        {...(!asChild ? props : { ...props, ref: ref as any })}
       >
         {isLoading ? (
           <span className="inline-block animate-spin mr-2">
