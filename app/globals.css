@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Fintech Color System */
+  --background: #f4f6f5;
+  --foreground: #091210;
+  --primary: #004b44;
+  --primary-light: #10b981;
+  --secondary: #1e293b;
+  --accent: #10b981;
+  --muted: #e6eae8;
+  --border: #d2dcd9;
+
+  /* Font */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Transitions */
+  --duration-300: 300ms;
+  --duration-500: 500ms;
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @theme inline {
@@ -14,13 +30,304 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #030a09;
+    --foreground: #f4f6f5;
+    --border: #1a3a34;
   }
 }
 
+* {
+  @apply transition-colors duration-300;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  @apply antialiased;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Dark mode scrollbar */
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: var(--secondary);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-light);
+  }
+}
+
+/* Selection */
+::selection {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+/* Focus Ring */
+:focus-visible {
+  @apply outline-none ring-2 ring-offset-2;
+  border-color: var(--primary);
+}
+
+/* Smooth Gradients */
+.gradient-text {
+  background: linear-gradient(135deg, #004b44 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-secondary {
+  background: linear-gradient(135deg, #1e293b 0%, #004b44 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass Morphism */
+.glass {
+  @apply relative border rounded-lg;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  @apply relative border rounded-lg;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Cards */
+.card {
+  @apply relative rounded-lg border transition-all duration-300;
+  background-color: #ffffff;
+  border-color: var(--border);
+}
+
+.dark .card {
+  background-color: var(--secondary);
+  border-color: var(--border);
+}
+
+.card-sm {
+  @apply relative rounded-lg border transition-all duration-300 p-4 sm:p-6;
+  background-color: #ffffff;
+  border-color: var(--border);
+}
+
+.dark .card-sm {
+  background-color: var(--secondary);
+  border-color: var(--border);
+}
+
+.card-lg {
+  @apply relative rounded-lg border transition-all duration-300 p-6 sm:p-8;
+  background-color: #ffffff;
+  border-color: var(--border);
+}
+
+.dark .card-lg {
+  background-color: var(--secondary);
+  border-color: var(--border);
+}
+
+/* Buttons - Base */
+.btn {
+  @apply relative inline-flex items-center justify-center font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none;
+}
+
+.btn-sm {
+  @apply relative inline-flex items-center justify-center font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none px-3 py-2 rounded-md;
+}
+
+.btn-md {
+  @apply relative inline-flex items-center justify-center font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none px-4 py-2.5 rounded-md;
+}
+
+.btn-lg {
+  @apply relative inline-flex items-center justify-center font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none px-6 py-3 rounded-lg;
+}
+
+.btn-primary {
+  @apply relative inline-flex items-center justify-center font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none text-white shadow-md hover:shadow-lg;
+  background-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: #00423a;
+}
+
+.btn-primary:active {
+  background-color: #003930;
+}
+
+.btn-secondary {
+  @apply relative inline-flex items-center justify-center font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none text-white;
+  background-color: var(--secondary);
+}
+
+.btn-secondary:hover {
+  background-color: #334155;
+}
+
+.btn-secondary:active {
+  background-color: #1a3a34;
+}
+
+.btn-accent {
+  @apply relative inline-flex items-center justify-center font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none text-white;
+  background-color: var(--accent);
+}
+
+.btn-accent:hover {
+  background-color: #059669;
+}
+
+.btn-accent:active {
+  background-color: #047857;
+}
+
+.btn-outline {
+  @apply relative inline-flex items-center justify-center font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.btn-outline:hover {
+  background-color: var(--muted);
+}
+
+.btn-ghost {
+  @apply relative inline-flex items-center justify-center font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none;
+  color: var(--foreground);
+}
+
+.btn-ghost:hover {
+  background-color: var(--muted);
+}
+
+/* Input & Form */
+.input,
+.textarea,
+.select {
+  @apply w-full px-4 py-2.5 rounded-lg border transition-all duration-300;
+  border-color: var(--border);
+  background-color: #ffffff;
+  color: var(--foreground);
+}
+
+.input::placeholder,
+.textarea::placeholder,
+.select::placeholder {
+  color: rgba(1, 18, 16, 0.5);
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  @apply outline-none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(0, 75, 68, 0.2);
+}
+
+.dark .input,
+.dark .textarea,
+.dark .select {
+  background-color: var(--secondary);
+  border-color: var(--border);
+  color: #ffffff;
+}
+
+.dark .input::placeholder,
+.dark .textarea::placeholder,
+.dark .select::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.textarea {
+  @apply resize-none;
+}
+
+/* Section Spacing */
+.section {
+  @apply py-16 md:py-24;
+}
+
+.section-sm {
+  @apply py-12 md:py-16;
+}
+
+.section-lg {
+  @apply py-20 md:py-32;
+}
+
+/* Container */
+.container-custom {
+  @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+}
+
+/* Loading Skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--muted) 0%,
+    #ffffff 50%,
+    var(--muted) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Loader */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  @apply w-full h-full animate-[spin_1s_linear_infinite];
 }
