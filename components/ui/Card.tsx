@@ -8,27 +8,41 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, size = "md", hover = true, glass = false, ...props }, ref) => {
+  (
+    {
+        className,
+        size = "md",
+        hover = true,
+        glass = false,
+        children,
+        ...props
+    },
+    ref
+  ) => {
     const sizeStyles = {
-      sm: "card-sm",
-      md: "card p-4 sm:p-6",
-      lg: "card-lg",
+        sm: "p-3",
+        md: "p-4 sm:p-6",
+        lg: "p-6 sm:p-8",
     };
 
     return (
       <div
         ref={ref}
         className={clsx(
-          sizeStyles[size],
-          glass && "glass dark:glass-dark",
-          hover && "hover:shadow-card-hover",
-          className
+            "card",
+            sizeStyles[size],
+            glass && "glass dark:glass-dark",
+            hover && "transition-shadow hover:shadow-card-hover",
+            className
         )}
         {...props}
-      />
+      >
+        {children}
+      </div>
     );
   }
 );
 
 Card.displayName = "Card";
+
 export default Card;
