@@ -1,105 +1,69 @@
-import React from "react";
-import Link from "next/link";
-import { Mail, Linkedin, Twitter, Github } from "lucide-react";
+import FooterBrand from "./footer-brand";
+import FooterLinks from "./footer-links";
+import FooterNewsletter from "./footer-newsletter";
+import FooterSocials from "./footer-socials";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const sections = [
-    {
-      title: "Product",
-      links: [
-        { label: "Features", href: "/services" },
-        { label: "Pricing", href: "/pricing" },
-        { label: "FAQ", href: "/#faq" },
-      ],
-    },
-    {
-      title: "Company",
-      links: [
-        { label: "About", href: "/about" },
-        { label: "Blog", href: "/blog" },
-        { label: "Contact", href: "/contact" },
-      ],
-    },
-    {
-      title: "Legal",
-      links: [
-        { label: "Privacy", href: "#" },
-        { label: "Terms", href: "#" },
-        { label: "Security", href: "#" },
-      ],
-    },
-  ];
-
-  const socials = [
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Github, href: "#", label: "GitHub" },
-    { icon: Mail, href: "mailto:hello@uptick.com", label: "Email" },
-  ];
-
   return (
-    <footer className="bg-foreground dark:bg-secondary text-white py-16 sm:py-20">
-      <div className="container-custom">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
-          {/* Brand */}
-          <div className="md:col-span-2">
-            <Link href="/" className="flex items-center space-x-2 font-bold text-lg mb-4">
-              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                <span className="text-foreground font-bold">U</span>
-              </div>
-              <span>Uptick Invest</span>
-            </Link>
-            <p className="text-white/60 text-sm leading-relaxed">
-              Premium fintech platform for modern investors. Invest smart, grow
-              faster.
-            </p>
-            <div className="flex items-center space-x-3 mt-6">
-              {socials.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    className="w-10 h-10 rounded-lg bg-white/10 hover:bg-accent hover:text-foreground transition-all flex items-center justify-center"
-                    aria-label={social.label}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </a>
-                );
-              })}
+    <footer className="relative overflow-hidden border-t border-white/10 bg-[#091210] text-white">
+      {/* Gradient Effects */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.12),transparent_40%)]" />
+
+      <div className="relative mx-auto max-w-7xl px-6 py-20">
+        {/* CTA */}
+        <div className="mb-20 rounded-[32px] border border-white/10 bg-white/5 p-10 backdrop-blur-2xl">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-accent">
+                Uptick Invest
+              </p>
+
+              <h2 className="text-4xl font-semibold leading-tight text-white">
+                Build wealth with intelligent investing infrastructure.
+              </h2>
+
+              <p className="mt-4 max-w-xl text-white/60">
+                Powerful analytics, portfolio management, and investment tools
+                built for modern investors and financial growth.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <button className="h-12 rounded-2xl bg-accent px-6 text-sm font-medium text-black transition-all hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(16,185,129,0.35)]">
+                Start Investing
+              </button>
+
+              <button className="h-12 rounded-2xl border border-white/10 bg-white/5 px-6 text-sm font-medium text-white backdrop-blur-xl transition-all hover:border-accent/40 hover:bg-white/10">
+                Book Consultation
+              </button>
             </div>
           </div>
-
-          {/* Links */}
-          {sections.map((section) => (
-            <div key={section.title}>
-              <h3 className="font-semibold mb-4">{section.title}</h3>
-              <ul className="space-y-2">
-                {section.links.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-white/60 hover:text-white text-sm transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-white/10 my-8" />
+        {/* Main Footer */}
+        <div className="grid gap-16 lg:grid-cols-[1.2fr_1fr_1fr]">
+          <FooterBrand />
+
+          <FooterLinks />
+
+          <FooterNewsletter />
+        </div>
 
         {/* Bottom */}
-        <div className="flex flex-col sm:flex-row items-center justify-between text-sm text-white/60">
-          <p>&copy; {currentYear} Uptick Invest. All rights reserved.</p>
-          <p>Crafted with care for modern investors.</p>
+        <div className="mt-20 flex flex-col gap-6 border-t border-white/10 pt-8 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="text-sm text-white/50">
+              © {currentYear} Uptick Invest. All rights reserved.
+            </p>
+
+            <p className="mt-1 text-xs text-white/30">
+              Built for the future of intelligent investing.
+            </p>
+          </div>
+
+          <FooterSocials />
         </div>
       </div>
     </footer>
