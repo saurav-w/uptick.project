@@ -1,113 +1,169 @@
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Moon, Sun } from "lucide-react";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import { useTheme } from "next-themes";
-import Button from "@/components/ui/Button";
+
+const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
 
-  const links = [
-    { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
-    { href: "/services", label: "Services" },
-    { href: "/pricing", label: "Pricing" },
-    { href: "/contact", label: "Contact" },
-  ];
+const { resolvedTheme, setTheme } = useTheme();
+  useEffect(() => {
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-secondary/80 backdrop-blur-md border-b border-border dark:border-secondary/50">
-      <div className="container-custom">
-        <div className="flex items-center justify-between h-16">
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+          isScrolled
+            ? "border-b border-border/40 bg-background/70 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-2xl"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 font-bold text-lg">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">U</span>
-            </div>
-            <span className="hidden sm:inline text-foreground dark:text-white">
-              Uptick
-            </span>
+          <Link href="/" className="relative z-50 flex items-center">
+            <Image
+              src={
+                resolvedTheme === "dark"
+                  ? "/logos/horizontal-logo-in-white.svg"
+                  : "/logos/horizontal-logo-without-gradient.svg"
+              }
+              alt="Uptick Invest"
+              width={180}
+              height={40}
+              priority
+              className="h-auto w-auto"
+            />
           </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-1">
-            {links.map((link) => (
+          {/* Desktop Navigation */}
+          <nav className="hidden items-center gap-8 lg:flex">
+            {navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.label}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-foreground dark:text-white hover:text-primary dark:hover:text-accent transition-colors"
+                className="group relative text-sm font-medium tracking-wide text-foreground/70 transition-all duration-300 hover:text-foreground dark:text-white/70 dark:hover:text-white"
               >
                 {link.label}
+
+                <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
-          </div>
+          </nav>
 
-          {/* Right Side - Theme Toggle & CTA */}
-          <div className="flex items-center space-x-4">
+          {/* Right Side */}
+          <div className="flex items-center gap-3">
+            {/* Theme Toggle */}
             <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 hover:bg-muted dark:hover:bg-secondary rounded-lg transition-colors"
-              aria-label="Toggle theme"
+              onClick={() =>
+                setTheme(resolvedTheme === "dark" ? "light" : "dark")
+              }
+              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-background/70 backdrop-blur-xl transition-all duration-300 hover:border-accent/40 hover:bg-accent/5 dark:border-white/10 dark:bg-white/5"
+              aria-label="Toggle Theme"
             >
-              {theme === "dark" ? (
-                <Sun className="w-5 h-5" />
+              {resolvedTheme === "dark" ? (
+                <Sun className="h-5 w-5 text-white" />
               ) : (
-                <Moon className="w-5 h-5" />
+                <Moon className="h-5 w-5 text-foreground" />
               )}
             </button>
 
-            <Button size="sm" variant="primary" asChild className="hidden sm:inline-flex">
-              <Link href="/contact">Get Started</Link>
-            </Button>
+            {/* Desktop CTA */}
+            <div className="hidden items-center gap-3 lg:flex">
+              <button className="h-11 rounded-2xl border border-border bg-background/60 px-5 text-sm font-medium text-foreground transition-all duration-300 hover:border-accent/40 hover:bg-accent/5 dark:border-white/10 dark:bg-white/5 dark:text-white">
+                Sign In
+              </button>
 
-            {/* Mobile Menu Button */}
+              <button className="h-11 rounded-2xl bg-primary px-5 text-sm font-medium text-white transition-all duration-300 hover:scale-[1.02] hover:bg-primary/90 hover:shadow-[0_0_40px_rgba(0,75,68,0.25)]">
+                Get Started
+              </button>
+            </div>
+
+            {/* Mobile Menu Toggle */}
             <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 hover:bg-muted dark:hover:bg-secondary rounded-lg transition-colors"
-              aria-label="Toggle menu"
+              onClick={() => setMobileMenu(!mobileMenu)}
+              className="relative z-50 flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-background/70 backdrop-blur-xl transition-all duration-300 hover:border-accent/40 dark:border-white/10 dark:bg-white/5 lg:hidden"
+              aria-label="Toggle Menu"
             >
-              {isOpen ? (
-                <X className="w-5 h-5" />
+              {mobileMenu ? (
+                <X className="h-5 w-5 text-foreground dark:text-white" />
               ) : (
-                <Menu className="w-5 h-5" />
+                <Menu className="h-5 w-5 text-foreground dark:text-white" />
               )}
             </button>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-border dark:border-secondary/50 bg-muted dark:bg-secondary/50"
-            >
-              <div className="px-4 py-4 space-y-2">
-                {links.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="block px-4 py-2 text-sm font-medium text-foreground dark:text-white hover:bg-white dark:hover:bg-secondary rounded-lg transition-colors"
-                    onClick={() => setIsOpen(false)}
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenu && (
+          <motion.div
+            initial={{ opacity: 0, y: -24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -24 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-3xl dark:bg-[#091210]/95 lg:hidden"
+          >
+            <div className="flex h-full flex-col px-6 pb-10 pt-28">
+              {/* Links */}
+              <nav className="flex flex-col gap-6">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.label}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
                   >
-                    {link.label}
-                  </Link>
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileMenu(false)}
+                      className="text-3xl font-semibold tracking-tight text-foreground transition-colors hover:text-accent dark:text-white"
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
                 ))}
-                <Button size="sm" variant="primary" asChild className="w-full">
-                  <Link href="/contact">Get Started</Link>
-                </Button>
+              </nav>
+
+              {/* Bottom CTA */}
+              <div className="mt-auto space-y-4">
+                <button className="h-12 w-full rounded-2xl border border-border bg-background/60 text-sm font-medium text-foreground transition-all dark:border-white/10 dark:bg-white/5 dark:text-white">
+                  Sign In
+                </button>
+
+                <button className="h-12 w-full rounded-2xl bg-primary text-sm font-medium text-white shadow-[0_0_30px_rgba(0,75,68,0.25)] transition-all hover:bg-primary/90">
+                  Get Started
+                </button>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
