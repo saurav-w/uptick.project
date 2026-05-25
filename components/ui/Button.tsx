@@ -7,6 +7,7 @@ interface ButtonProps
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
   icon?: React.ReactNode;
+  asChild?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -19,6 +20,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       icon,
       children,
       disabled,
+      asChild = false,
       ...props
     },
     ref
@@ -39,18 +41,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ghost: "btn-ghost",
     };
 
-    return (
-      <button
-        ref={ref}
-        disabled={disabled || isLoading}
-        className={clsx(
-          baseStyles,
-          sizeStyles[size],
-          variantStyles[variant],
-          className
-        )}
-        {...props}
-      >
+    const classes = clsx(
+      baseStyles,
+      sizeStyles[size],
+      variantStyles[variant],
+      className
+    );
+
+    const content = (
+      <>
         {isLoading ? (
           <svg
             className="w-4 h-4 mr-2 animate-spin"
@@ -74,8 +73,25 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ) : icon ? (
           <span className="mr-2">{icon}</span>
         ) : null}
-
         {children}
+      </>
+    );
+
+    if (asChild && React.isValidElement(children)) {
+      return React.cloneElement(children as React.ReactElement<any>, {
+        className: clsx((children as React.ReactElement<any>).props.className, classes),
+        ...props,
+      });
+    }
+
+    return (
+      <button
+        ref={ref}
+        disabled={disabled || isLoading}
+        className={classes}
+        {...props}
+      >
+        {content}
       </button>
     );
   }
