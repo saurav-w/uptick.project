@@ -1,8 +1,10 @@
-import mongoose, {
+import {
   Schema,
   model,
   models,
   type HydratedDocument,
+  type HookNextFunction,
+  type Model,
 } from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -11,13 +13,17 @@ export interface IUser {
   password: string;
   createdAt?: Date;
   updatedAt?: Date;
+}
 
+export interface IUserMethods {
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-type UserDocument = HydratedDocument<IUser>;
+type UserDocument = HydratedDocument<IUser, IUserMethods>;
 
-const UserSchema = new Schema<IUser>(
+type UserModel = Model<IUser, unknown, IUserMethods>;
+
+const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
   {
     email: {
       type: String,
@@ -39,7 +45,7 @@ const UserSchema = new Schema<IUser>(
   }
 );
 
-UserSchema.pre<UserDocument>("save", async function (next: any) {
+UserSchema.pre<UserDocument>("save", async function (next: HookNextFunction) {
   if (!this.isModified("password")) {
     return next();
   }
@@ -47,7 +53,6 @@ UserSchema.pre<UserDocument>("save", async function (next: any) {
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-
     next();
   } catch (error) {
     next(error as Error);
@@ -57,10 +62,13 @@ UserSchema.pre<UserDocument>("save", async function (next: any) {
 UserSchema.methods.comparePassword = async function (
   candidatePassword: string
 ) {
+  if (!this.password) {
+    return false;
+  }
+
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-const User =
-  models.User || model<IUser>("User", UserSchema);
+const User = models.User || model<IUser, UserModel>("User", UserSchema);
 
 export default User;
