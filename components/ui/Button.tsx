@@ -114,10 +114,11 @@ const buttonVariants = cva(
   }
 );
 
-type ButtonProps = React.ComponentProps<"button"> &
+type ButtonProps = Omit<React.ComponentProps<"button">, "onDrag"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
     loading?: boolean;
+    onDrag?: HTMLMotionProps<"button">["onDrag"];
   };
 
 function Button({

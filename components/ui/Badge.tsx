@@ -93,10 +93,11 @@ const badgeVariants = cva(
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onDrag">,
     VariantProps<typeof badgeVariants> {
   asChild?: boolean;
   pulse?: boolean;
+  onDrag?: HTMLMotionProps<"span">["onDrag"];
 }
 
 export function Badge({
